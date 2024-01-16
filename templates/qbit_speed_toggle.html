@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{% block title %} Qbit speed toggle {% endblock %}</h1>
+    <script type="text/javascript">
+    $(function() {
+        function flashMessage(data){
+            html = '<div class="float-start alert alert-' + data['type'] + '"><a href="#" class="close" data-dismiss="alert">&times;</a>' + data.message + '</div>';
+            return html;
+        }
+        $('input[type=radio]').on('change', function() {
+            $(this).closest('form').submit()
+        });
+        $('form').submit(function(event) {
+            event.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: '/qbit',
+                data: {
+                    radio: $('input[name="radio"]:checked').val(),
+                },
+                success: function(results){
+                    $('#flash').append(flashMessage(results));
+               }
+            });
+        });
+    });
+    </script>
+    <form class="switch3" action="{{ url_for('qbit_speed_toggle') }}" method="POST">
+        {% if radio == '1' %}
+        <input type="radio" id="switch3-radio1" name="radio" value="1" checked="checked"/>
+        <label for="switch3-radio1">Disabled</label> 
+        {% else %}
+        <input type="radio" id="switch3-radio1" name="radio" value="1"/>
+        <label for="switch3-radio1">Disabled</label>
+        {% endif %}
+
+        {% if radio == '2' %}
+        <input type="radio" id="switch3-radio2" name="radio" value="2" checked="checked"/>
+        <label for="switch3-radio2">Turn off only</label>
+        {% else %}
+        <input type="radio" id="switch3-radio2" name="radio" value="2"/>
+        <label for="switch3-radio2">Turn off only</label>
+        {% endif %}
+
+        {% if radio == '3' %}
+        <input type="radio" id="switch3-radio3" name="radio" value="3" checked="checked"/>
+        <label for="switch3-radio3">Enabled</label>
+        {% else %}
+        <input type="radio" id="switch3-radio3" name="radio" value="3"/>
+        <label for="switch3-radio3">Enabled</label>
+        {% endif%}
+    </form>
+    <div id="flash"></div>
+{% endblock %}
