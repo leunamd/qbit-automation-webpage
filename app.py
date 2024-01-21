@@ -1,6 +1,9 @@
 from flask import Flask, render_template, redirect, url_for, request, jsonify
+from dotenv import load_dotenv
 
-DEFAULT_RADIO_VALUE = '2'
+load_dotenv()
+
+DEFAULT_RADIO_VALUE = os.getenv('DEFAULT_RADIO_VALUE','2')
 #'1' -> disabled; '2' -> turn off only; '3' -> enabled
 
 class State:
